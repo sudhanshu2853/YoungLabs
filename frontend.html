@@ -1,0 +1,105 @@
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YoungLabs</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="frontend.css">
+
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<style>
+    /* General styles */
+    body {
+        background: rgb(64, 91, 148);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        user-select: none;
+    }
+
+    /* Input group */
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Input field */
+    input {
+        padding: 10px;
+        font-size: 18px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        width: 250px;
+        outline: none;
+    }
+
+    /* Button styles */
+    .btn {
+        background-color: blueviolet;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background 0.3s ease-in-out;
+    }
+
+    .btn:hover {
+        background-color: indigo;
+    }
+</style>
+
+<body>
+    <div class="input-group">
+        <label for="name">Enter Name</label>
+        <input type="text" name="name" id="name" placeholder="Enter name" autocomplete="off">
+        <button class="btn">Get Greeting</button>
+        <h3 id="output"></h3>
+    </div>
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const btn = document.querySelector(".btn");
+        const input = document.querySelector("#name");
+        const output = document.querySelector("#output");
+
+        btn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            const inputValue = input.value.trim();
+
+            try {
+                const response = await axios.get(`/api/greet?name=${encodeURIComponent(inputValue)}`);
+                output.textContent = response.data.message;
+                output.style.color = "green";
+            } catch (error) {
+                if (error.response) {
+                    output.textContent = error.response.data.error || "⚠️ Error fetching greeting!";
+                    output.style.color = "red";
+                } else {
+                    output.textContent = "⚠️ Network error!";
+                    output.style.color = "red";
+                }
+            }
+        });
+    });
+
+</script>
+
+</html>
